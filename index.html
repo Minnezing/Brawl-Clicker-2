@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl Clicker</title>
+
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/ranks.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/adaptive.css">
+
+    <script src="./js/brawlersData.js" defer></script>
+    <script src="./js/brawlerCard.js" defer></script>
+    <script src="./js/fx.js" defer></script>
+    <script src="./js/utils.js" defer></script>
+    <script src="./js/data.js" defer></script>
+    <script src="./js/render.js" defer></script>
+    <script src="./js/events.js" defer></script>
+    <script src="./js/index.js" defer></script>
+</head>
+<body>
+    <main class="main">
+        <section class="clicker">
+            <h1 class="clicker-title">Brawl Clicker</h1>
+            <div class="clicker-stats-wrapper">
+                <div class="stat">
+                    <img src="./assets/icons/gem.png" alt="Gem" class="stat-icon">
+                    <span id="gems" class="stat-count number">100</span>
+                </div>
+                <div class="stat">
+                    <img src="./assets/icons/exp.png" alt="Exp" class="stat-icon">
+                    <span id="exp" class="stat-count number">100</span>
+                </div>
+            </div>
+            <img src="./assets/icons/clicker.png" draggable="false" alt="Click" id="click" class="main-clicker">
+            <div class="events" id="events">
+                <div class="event">
+                    <img src="./assets/starpowers/Shelly.webp" draggable="false" class="event-icon">
+                    <p class="details details-top event-details">бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла</p>
+                </div>
+            </div>
+        </section>
+        <section class="brawlers">
+            <div class="brawlers-wrapper">
+                <h1 class="brawlers-title">
+                    <span class="brawlers-title_blue">
+                        <span class="number" id="brawlers-count"></span>
+                        из
+                        <span class="number" id="brawlers-all-count"></span>
+                    </span>
+                    бойцов
+                </h1>
+                <div class="brawlers-gadgets">
+                    <div class="brawlers-gadgets-header">
+                        <img src="./assets/icons/gadget.png" alt="Гаджеты" class="brawlers-gadgets-icon">
+                        <div class="brawlers-gadgets-text">
+                            <p class="brawlers-gadgets-title">Гаджеты</p>
+                            <p class="brawlers-gadgets-info">
+                                <span class="number" id="gadgets-count"></span>
+                                из
+                                <span class="number" id="gadgets-all-count"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="brawlers-gadgets-list">
+                        <div class="brawlers-gadgets-item">
+                            <img src="./assets/gadgets/Shelly.webp" draggable="false" alt="" class="brawlers-gadgets-item-icon">
+                            <img src="./assets/pins/Shelly_Thanks.webp" draggable="false" alt="" class="brawlers-gadgets-item-status-icon">
+                            <p class="details brawlers-gadgets-item-details">бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="brawlers-list" id="brawlers">
+                    <div class="brawlers-list-item opened">
+                        <div class="brawler-main">
+                            <div class="brawler-header">
+                                <div class="brawler-rank">
+                                    <div class="brawler-rank-icon">
+                                        <img src="./assets/ranks/bronze.svg" draggable="false" class="brawler-rank-icon-background">
+                                        <span class="brawler-rank-icon-text number">1</span>
+                                    </div>
+                                    <img src="./assets/icons/gem.png" alt="Gems" class="brawler-rank-curr-icon">
+                                    <span class="brawler-rank-curr-count number">100</span>
+                                </div>
+                                <div class="brawler-introducing start">
+                                    <img src="./assets/portraits/Shelly.webp" draggable="false" class="brawler-introducing-portrait">
+                                    <span class="brawler-introducing-name">Шелли</span>
+                                </div>
+                                <div class="brawler-level">
+                                    <div class="brawler-level-icon">
+                                        <img src="./assets/icons/level.svg" draggable="false" class="brawler-level-icon-background">
+                                        <span class="brawler-level-icon-text number">1</span>
+                                    </div>
+                                    <img src="./assets/icons/gem.png" alt="Gems" class="brawler-level-curr-icon">
+                                    <span class="brawler-level-curr-count number number-unavailable">100</span>
+                                </div>
+                            </div>
+                            <p class="brawler-description">Короче тут описание бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла</p>
+                        </div>
+                        <div class="brawler-additional">
+                            <div class="brawler-abilities">
+                                <div class="brawler-gadget">
+                                    <img src="./assets/gadgets/Shelly.webp" draggable="false" alt="Gadget" class="brawler-gadget-icon unavailable">
+                                    <p class="details abilities-details">бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла</p>
+                                </div>
+                                <div class="brawler-starpower">
+                                    <img src="./assets/starpowers/Shelly.webp" draggable="false" alt="Starpower" class="brawler-starpower-icon">
+                                    <p class="details abilities-details">бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла</p>
+                                </div>
+                            </div>
+                            <div class="brawler-stats">
+                                <div class="brawler-stats-item">
+                                    <p class="brawler-stats-item-title">клик за клик</p>
+                                    <p class="brawler-stats-item-value number">1000</p>
+                                </div>
+                                <div class="brawler-stats-item">
+                                    <p class="brawler-stats-item-title">Кристаллов в секунду</p>
+                                    <p class="brawler-stats-item-value number">1000</p>
+                                </div>
+                            </div>
+                            <button class="brawler-upgrade">
+                                <img src="./assets/icons/gem.png" alt="Gems" class="brawler-upgrade-curr-icon">
+                                <span class="brawler-upgrade-curr-count number">100</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="header-line"></div>
+    </main>
+</body>
+</html>

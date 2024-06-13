@@ -1,0 +1,819 @@
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+@font-face {
+    font-family: Pusia;
+    src: url("../assets/fonts/Pusia-Bold.otf") format("opentype");
+}
+
+h1, p, span {
+    color: #fff;
+    text-shadow: 0px max(1px, 0.13em) 0px black,
+                 1px 0px 0px black,
+                 -1px 0 0 black,
+                 0 -1px 0 black;
+    font-family: 'Pusia';
+}
+
+.number {
+    font-family: "Lilita One", sans-serif;
+}
+
+h1 {
+    font-size: 42px;
+    z-index: 11;
+    position: relative;
+    text-align: center;
+}
+
+.details {
+    position: absolute;
+    opacity: 0;
+
+    z-index: 100;
+
+    padding: 15px;
+    border-radius: 10px;
+
+    background-color: #fff;
+    color: #000;
+    text-shadow: none;
+
+    width: 190px;
+
+    top: calc(100% + 15px);
+
+    font-size: 16px;
+
+    user-select: none;
+
+    transition: opacity 0.2s;
+
+    pointer-events: none;
+}
+
+.details-top {
+    bottom: calc(100% + 15px);
+    top: unset;
+}
+
+.details::before {
+    content: "";
+
+    position: absolute;
+    display: block;
+
+    width: 10px;
+    height: 10px;
+
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #fff;
+
+    clip-path: polygon(50% 0, 0 100%, 100% 100%, 50% 0);
+}
+
+.details-top::before {
+    top: unset;
+    bottom: -10px;
+    clip-path: polygon(0 0, 50% 100%, 50% 100%, 100% 0);
+}
+
+.details-cost-curr {
+    width: 20px;
+    vertical-align: middle;
+}
+
+.details-cost-value {
+    vertical-align: middle;
+
+    font-size: inherit;
+    color: inherit;
+    text-shadow: inherit;
+}
+
+.main {
+    display: flex;
+    height: 100vh;
+    padding-top: 10px;
+
+    box-sizing: border-box;
+}
+
+.header-line {
+    width: 100%;
+    height: 40px;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+
+    z-index: 10;
+}
+
+.clicker {
+    position: relative;
+
+    flex-grow: 1;
+    min-width: 550px;
+
+    background-image: url(../assets/backgrounds/castle_background.jpg);
+    background-size: cover;
+    background-position: center;
+    border-right: 1px solid black;
+}
+
+.brawlers {
+    flex-grow: 1;
+    height: 100%;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.brawlers-title_blue,
+.brawlers-title_blue span {
+    color: #4BC6FF;
+}
+
+.brawlers-wrapper {
+    overflow: auto;
+    height: 100%;
+
+    position: relative;
+}
+
+.brawlers::before {
+    content: "";
+
+    background: #0147B9 url(../assets/backgrounds/skulls_pattern.png);
+    background-repeat: repeat;
+    background-size: 300px;
+    transform: rotate(10.3deg);
+
+    position: absolute;
+
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+
+    z-index: -1;
+}
+
+.clicker-stats-wrapper {
+    margin-top: 20px;
+}
+
+.stat {
+    background-color: #000;
+
+    width: 80%;
+
+    margin-inline: auto;
+
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 60px;
+
+    clip-path: polygon(0px 0px, 0px 100%, calc(100% - 10px) 100%, 100% 0);
+
+    user-select: none;
+}
+
+.stat:not(:first-child) {
+    margin-top: 15px;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+
+    object-fit: contain;
+    object-position: center;
+
+    pointer-events: none;
+
+    vertical-align: middle;
+}
+
+.stat-count {
+    font-size: 42px;
+    vertical-align: middle;
+
+    margin-left: 5px;
+}
+
+.main-clicker {
+    position: absolute;
+    border-radius: 100%;
+
+    left: 50%;
+    top: max(450px, 50%);
+
+    transform: translate(-50%, -50%);
+
+    cursor: pointer;
+    user-select: none;
+
+    transition: transform .1s, box-shadow .3s;
+}
+
+.main-clicker:active {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 0 120px rgba(255, 189, 32, 0.7);
+}
+
+.events {
+    position: absolute;
+    bottom: 0;
+
+    display: flex;
+    margin: 5px;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.event {
+    position: relative;
+}
+
+.event-icon {
+    width: 45px;
+    height: 45px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.event-details::before {
+    left: calc(45px/2);
+}
+
+.event-icon:hover + .details {
+    opacity: 1;
+}
+
+.brawlers-gadgets {
+    position: absolute;
+    left: 22px;
+
+    z-index: 100;
+}
+
+.brawlers-gadgets {
+    background-color: #fff;
+
+    border-radius: 10px;
+    padding: 15px;
+
+    transition-property: padding, background-color;
+    transition-duration: 0.3s;
+}
+
+.brawlers-gadgets:not(:hover) {
+    padding: 0;
+    background-color: transparent;
+}
+
+
+.brawlers-gadgets:not(:hover) > .brawlers-gadgets-header > .brawlers-gadgets-text {
+    display: none;
+}
+
+.brawlers-gadgets:not(:hover) > .brawlers-gadgets-list {
+    display: none;
+}
+
+.brawlers-gadgets-header {
+    display: flex;
+    gap: 10px;
+
+    align-items: center;
+}
+
+.brawlers-gadgets-icon {
+    cursor: pointer;
+    width: 55px;
+}
+
+.brawlers-gadgets-title {
+    color: #00FF00;
+
+    font-size: 24px;
+}
+
+.brawlers-gadgets-info,
+.brawlers-gadgets-info span {
+    color: #000;
+    text-shadow: none;
+
+    font-size: 18px;
+    
+    margin-top: 5px;
+}
+
+.brawlers-gadgets-list {
+    display: grid;
+    grid-template-columns: repeat(5, 55px);
+    grid-auto-rows: 55px;
+
+    gap: 15px;
+    padding: 5px;
+
+    margin-top: 20px;
+}
+
+.brawlers-gadgets-item {
+    position: relative;
+}
+
+.brawlers-gadgets-item-icon {
+    width: 55px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.brawlers-gadgets-item-status-icon {
+    width: 25px;
+
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+
+    user-select: none;
+}
+
+.brawlers-gadgets-item-details {
+    background-color: #fff;
+    border: 1px solid #000;
+    display: none;
+
+    top: calc(100% + 5px);
+}
+
+.brawlers-gadgets-item-details::before {
+    display: none;
+}
+
+.brawlers-gadgets-item-icon:hover ~ .details,
+.brawlers-gadgets-item-status-icon:hover ~ .details {
+    opacity: 1;
+    display: block;
+    pointer-events: none;
+}
+
+.brawlers-list {
+    display: grid;
+    grid-template-columns: repeat(3, 280px);
+    grid-auto-rows: 250px;
+
+    justify-content: center;
+
+    gap: 50px;
+
+    margin-top: 20px;
+
+    padding-bottom: 180px;
+}
+
+.brawlers-list-item {
+    transition-property: padding, gap;
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(.18,.89,.32,1.28);
+}
+
+.brawler-rank  {
+    position: relative;
+
+    width: 170px;
+    padding: 3px;
+
+    background-color: #000;
+
+    z-index: 6;
+    
+    clip-path: polygon(-10px -10px, -10px calc(100% + 10px), calc(100% - 10px) 100%, 100% 0px);
+}
+
+.brawler-rank::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    
+    top: 0;
+    left: 0;
+    
+    position: absolute;
+    background: linear-gradient(#1F2935 0%, #1F2935 60%, #273041 60%, #273041 100%);
+    
+    clip-path: polygon(3px 3px, 3px calc(100% - 3px), calc(100% - 12px) calc(100% - 3px), calc(100% - 3px) 3px);
+}
+
+.brawler-rank-icon-background {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    height: 40px;
+}
+
+.brawler-rank-icon-text {
+    position: absolute;
+    transform: translateX(-50%) rotate(-5deg);
+
+    top: 2px;
+    left: 13px;
+
+    font-size: 22px;
+}
+
+.brawler-rank-curr-icon {
+    width: 20px;
+}
+
+.brawler-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.brawler-rank-curr-count {
+    font-size: 20px;
+    color: #2CDC18;
+}
+
+.locked .brawler-rank {
+    display: none;
+}
+
+.brawler-introducing {
+    position: relative;
+    z-index: 5;
+
+    border: 3px solid black;
+
+    cursor: pointer;
+
+    margin-top: -3px;
+    user-select: none;
+}
+
+.brawler-introducing-portrait {
+    height: 180px;
+    object-fit: cover;
+    object-position: left;
+}
+
+.locked .brawler-introducing-portrait {
+    filter: grayscale(60%);
+    height: 208px;
+}
+
+.brawler-introducing-name {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+.brawler-level {
+    position: relative;
+    background: #382739;
+    border: 3px solid #000;
+
+    border-top: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    padding: 5px;
+
+    z-index: 6;
+
+    border-bottom-left-radius: 15px;
+}
+
+.brawler-level.max {
+    background: linear-gradient(100deg, #fb9800 0%, #fb9800 20%, #fdcc06 20%, #fdcc06 85%, #fb9800 85%, #fb9800 100%);
+}
+
+.brawler-level-curr-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.brawler-level-curr-count {
+    font-size: 26px;
+}
+
+.brawler-level-icon-background {
+    height: 50px;
+    
+    position: absolute;
+    left: -7px;
+    top: -5px;
+}
+
+.brawler-level-icon-text {
+    position: absolute;
+    transform: translateX(-50%);
+
+    top: 5px;
+    left: 17px;
+
+    font-size: 26px;
+}
+
+.number-unavailable {
+    color: #EF0B0C;   
+}
+
+.brawler-description {
+    width: 250px;
+    margin-top: 10px;
+    opacity: 0.7;
+}
+
+.brawler-description,
+.brawler-additional {
+    display: none;
+}
+
+.opened .brawler-description,
+.opened .brawler-additional {
+    display: block;
+}
+
+.opened {
+    padding: 30px 25px;
+    background-color: #0147B9;
+    border: 3px solid #000;
+
+    border-radius: 10px;
+
+    display: flex;
+    gap: 30px;
+
+    position: relative;
+    z-index: 10;
+
+    transform: translateX(-50%);
+    position: relative;
+    left: 50%;
+
+    height: fit-content;
+    width: max-content;
+}
+
+.opened .brawler-header {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.opened .brawler-rank {
+    order: 3;
+    align-self: center;
+    flex-grow: 1;
+    margin-left: 20px;
+
+    user-select: none;
+}
+
+.opened .brawler-introducing {
+    margin-left: -25px;
+    margin-bottom: 10px;
+    flex-basis: calc(100% + 25px);
+    height: 80px;
+
+    border: none;
+    cursor: default;
+
+    clip-path: polygon(0px 22px, 0px 100%, calc(100% - 20px) calc(100% - 10px), 100% 0);
+
+    transition: margin .2s cubic-bezier(.18,.89,.32,1.28);
+}
+
+.opened .brawler-introducing::before {
+    content: "";
+    display: block;
+
+    background-color: #000;
+
+    z-index: -1;
+
+    position: absolute;
+    bottom: 5px;
+    transform: rotate(-2.5deg);
+
+    width: 100%;
+    height: 5px;
+}
+
+.opened .brawler-introducing-portrait {
+    display: none;
+}
+
+.opened .brawler-introducing-name {
+    right: 36px;
+    top: 15px;
+
+    font-size: 32px;
+    transform: rotate(-4.5deg);
+}
+
+.opened .brawler-level {
+    border: 0;
+    padding: 0;
+    background: transparent;
+
+    user-select: none;
+}
+
+.opened .brawler-level .brawler-level-curr-icon,
+.opened .brawler-level .brawler-level-curr-count {
+    display: none;
+}
+
+.opened .brawler-level-icon-background {
+    position: static;
+}
+
+.opened .brawler-level-icon-text {
+    top: 10px;
+    left: 24px;
+}
+
+.brawler-abilities {
+    display: flex;
+    justify-content: space-around;
+}
+
+.brawler-gadget,
+.brawler-starpower {
+    flex-shrink: 0;
+    position: relative;
+}
+
+.brawler-gadget-icon,
+.brawler-starpower-icon {
+    height: 75px;
+    width: 75px;
+    object-fit: contain;
+    user-select: none;
+    cursor: pointer;
+}
+
+.abilities-details {
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.brawler-gadget-icon:hover + .details,
+.brawler-starpower-icon:hover + .details {
+    opacity: 1;
+}
+
+.brawler-stats {
+    margin-top: 25px;
+}
+
+.brawler-stats-item {
+    background-color: rgba(0, 0, 0, .6);
+    padding: 0 10px 10px 10px;
+}
+
+.brawler-stats-item-title {
+    text-transform: uppercase;
+    font-size: 16px;
+    color: #2CDC18;
+
+    position: relative;
+    top: -7px;
+}
+
+.brawler-stats-item-value {
+    font-size: 16px;
+
+    display: inline;
+}
+
+.gems-per-second-add {
+    color: #01FC02;
+}
+
+.brawler-stats-item:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.brawler-upgrade {
+    margin-top: 25px;
+
+    background-color: #05D90A;
+    box-shadow: inset 0 -5px 0 #049501, inset 0 5px 0 #01FC02, 0 4px 0 #000;
+    border: 1px solid #000;
+    border-radius: 5px;
+
+    width: 100%;
+
+    padding: 15px 0;
+}
+
+.brawler-upgrade-curr-icon {
+    width: 30px;
+    height: 30px;
+
+    object-fit: contain;
+}
+
+.brawler-upgrade.lack {
+    background-color: #2373fe;
+    box-shadow: inset 0 -5px 0 #0a4af2, inset 0 5px 0 #1895ff, 0 4px 0 #000;
+}
+
+.brawler-upgrade.max {
+    background-color: #fdcd07;
+    box-shadow: inset 0 -5px 0 #fc9e00, inset 0 5px 0 #fdf4a9, 0 4px 0 #000;
+
+    font-family: 'Pusia';
+}
+
+.brawler-upgrade-curr-count {
+    font-size: 26px;
+}
+
+.brawler-upgrade.unavailable > .brawler-upgrade-curr-count {
+    color: #f30908;
+}
+
+.unavailable {
+    filter: grayscale(1);
+}
+
+@keyframes adding__fx__animation {
+    from {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    30% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+@keyframes bubbleAppearing {
+    0% {
+        width: 0;
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    40% {
+        width: 75px;
+    }
+    55% {
+        width: 70px;
+    }
+    70% {
+        width: 110px;
+    }
+    99% {
+        width: 150px;
+    }
+    100% {
+        width: 160px;
+    }
+}
+
+.gadget-activated {
+    animation: gadget-activated 2s cubic-bezier(.6,-0.28,.74,.05);
+}
+
+@keyframes gadget-activated {
+    from {
+        box-shadow: 0 0 35px #0F0;
+    }
+    to {
+        box-shadow: none;
+    }
+}
+
+.buffed {
+    animation: buff 1.2s infinite alternate;
+}
+
+@keyframes buff {
+    from {
+        box-shadow: none;
+    }
+    to {
+        box-shadow: 0 0 35px #fdcd07;
+    }
+}

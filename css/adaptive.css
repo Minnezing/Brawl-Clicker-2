@@ -1,0 +1,51 @@
+@media screen and (max-width: 1850px) {
+    .brawlers-list {
+        grid-template-columns: repeat(2, 280px);;
+    }
+}
+
+@media screen and (max-width: 1460px) {
+    .brawlers-list {
+        grid-template-columns: repeat(1, 280px);;
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .brawlers-list {
+        grid-template-columns: repeat(2, 280px);;
+    }
+    .main {
+        flex-direction: column;
+        height: unset;
+    }
+    .events {
+        margin-right: 250px;
+    }
+    .clicker {
+        min-height: 91vh;
+        min-width: unset;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .brawlers-list {
+        grid-template-columns: repeat(1, 280px);;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .brawlers-list {
+        grid-template-columns: repeat(1, 80%);;
+    }
+    .opened {
+        flex-direction: column;
+        width: unset;
+    }
+    .brawler-description {
+        width: unset;
+    }
+    .brawlers-gadgets {
+        position: fixed;
+        top: 20px;
+    }
+}

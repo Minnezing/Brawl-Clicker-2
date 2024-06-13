@@ -1,0 +1,23 @@
+.start {
+    background-color: #96D8F3;
+}
+
+.rare {
+    background-color: #2EDD1C;
+}
+
+.superrare {
+    background-color: #0087FA;
+}
+
+.epic {
+    background-color: #B116EC;
+}
+
+.mythic {
+    background-color: #FF0020;
+}
+
+.legendary {
+    background-color: #FFF11E;
+}
