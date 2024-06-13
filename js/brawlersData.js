@@ -595,15 +595,18 @@ let brawlersData = {
             {
                 name: "fangGadget",
                 execute: (gpc) => {
-                    gpc.fang *= 2;
+                    let cgpc = Object.values(gpc).reduce((acc, curr) => acc + curr, 0);
+
+                    gpc.fang += cgpc;
                 }
             },
             {
                 name: "fangStarpower",
                 execute: (gpc) => {
                     let multiplier = userBrawlersData.find(brw => brw.id === "fang").level;
+                    let cgpc = Object.values(gpc).reduce((acc, curr) => acc + curr, 0);
 
-                    gpc.fang *= (multiplier - 1);
+                    gpc.fang += cgpc * (multiplier - 1);
                 }
             }
         ],
