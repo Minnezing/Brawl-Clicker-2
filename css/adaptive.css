@@ -22,7 +22,7 @@
         margin-right: 250px;
     }
     .clicker {
-        min-height: 91vh;
+        min-height: max(91vh, 700px);
         min-width: unset;
     }
 }
