@@ -29,7 +29,10 @@
 
 @media screen and (max-width: 900px) {
     .brawlers-list {
-        grid-template-columns: repeat(1, 280px);;
+        grid-template-columns: repeat(1, 280px);
+    }
+    .brawlers::before {
+        transform: none;
     }
 }
 
