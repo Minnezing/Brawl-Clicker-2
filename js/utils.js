@@ -159,3 +159,37 @@ function resetAll() {
     startGameCycle();
     setTimeout(() => window.location.reload(), 0);
 }
+
+function setGems(value) {
+    gems = value;
+    render();
+    return "Done";
+}
+
+function setExp(value) {
+    exp = value;
+    render();
+    return "Done";
+}
+
+function resetBrawlerGadget(brawlerId) {
+    if (!userBrawlersData.some(brw => brw.id === brawlerId)) return console.error("Нет бойца с id = "+ brawlerId);
+    setBrawlerData(brawlerId, { "gadget": true });
+    render();
+    return "Done";
+}
+
+function setBrawlerEarnedGems(brawlerId, earned) {
+    if (!userBrawlersData.some(brw => brw.id === brawlerId)) return console.error("Нет бойца с id = "+ brawlerId);
+    setBrawlerData(brawlerId, { "earned": earned });
+    render();
+    return "Done";
+}
+
+function setBrawlerEarnedInSeconds(brawlerId, earnedInSeconds) {
+    let brawlerData = brawlersData[brawlerId];
+    if (!brawlerData) return console.error("Нет бойца с id = "+ brawlerId);
+    setBrawlerData(brawlerId, { "earned": earnedInSeconds * brawlerData.gemsPerSecond.at(-1) });
+    render();
+    return "Done";
+}
