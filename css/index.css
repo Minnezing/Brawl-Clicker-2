@@ -792,8 +792,17 @@ h1 {
     }
 }
 
-.gadget-activated {
-    animation: gadget-activated 2s cubic-bezier(.6,-0.28,.74,.05);
+@keyframes gemAppearing {
+    0% {
+        width: 0;
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    40% {
+        width: 75px;
+    }
 }
 
 @keyframes gadget-activated {
@@ -805,15 +814,35 @@ h1 {
     }
 }
 
-.buffed {
-    animation: buff 1.2s infinite alternate;
-}
-
-@keyframes buff {
+@keyframes pulse {
     from {
         box-shadow: none;
     }
     to {
-        box-shadow: 0 0 35px #fdcd07;
+        box-shadow: 0 0 35px var(--color);
     }
+}
+
+.buffed {
+    --color: #fdcd07;
+    animation: pulse 1.2s infinite alternate;
+}
+
+.berserk {
+    --color: #ff3232;
+    animation: pulse 1.2s infinite alternate;
+}
+
+.intoxicated {
+    --color: rgb(105, 255, 192);
+    animation: pulse 1.2s infinite alternate;
+}
+
+.sleep {
+    --color: darkgray;
+    animation: pulse 1.2s infinite alternate;
+}
+
+.gadget-activated {
+    animation: gadget-activated 2s cubic-bezier(.6,-0.28,.74,.05);
 }

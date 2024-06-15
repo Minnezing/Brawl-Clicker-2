@@ -207,6 +207,9 @@ function render() {
             
             let levelCostElement = brawlerElement.querySelectorAll(`.brawl-level-cost`);
 
+            let earningElement = brawlerElement.querySelector(`.gems-per-second-earning`);
+            earningElement.innerHTML = shortNumber(brawlerData.gemsPerSecond[brawler.level - 1]);
+
             if (brawler.level == brawlerData.gemsPerSecond.length) {
                 levelCostElement.forEach(ce => {
                     ce.innerHTML = "MAX LEVEL"
@@ -217,6 +220,9 @@ function render() {
                 });
                 brawlerElement.querySelectorAll(`.brawler-upgrade-curr-icon`).forEach(e => e.style.display = "none");
                 brawlerElement.querySelectorAll(`.brawler-level-curr-icon`).forEach(e => e.style.display = "none");
+
+                let addElement = brawlerElement.querySelector(`.gems-per-second-add`);
+                addElement.style.display = "none";
             } else {
                 let addElement = brawlerElement.querySelector(`.gems-per-second-add`);
                 addElement.style.display = "inline";
@@ -396,7 +402,7 @@ function renderAll() {
                         </div>
                         <div class="brawler-stats-item">
                             <p class="brawler-stats-item-title">Кристаллов в секунду</p>
-                            <p class="brawler-stats-item-value number">${shortNumber(brawlerData.gemsPerSecond[(userData?.level ?? 1) - 1])}</p>
+                            <p class="brawler-stats-item-value gems-per-second-earning number">${shortNumber(brawlerData.gemsPerSecond[(userData?.level ?? 1) - 1])}</p>
                             <span class="gems-per-second-add number" ${(!userData?.level || userData?.level == brawlerData.gemsPerSecond.length) ? "style=\"display: none\"" : ""}>+${shortNumber(brawlerData.gemsPerSecond[userData?.level ?? 1] - brawlerData.gemsPerSecond[(userData?.level ?? 2) - 1])}</span>
                         </div>
                     </div>

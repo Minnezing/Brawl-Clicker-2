@@ -76,10 +76,8 @@ function click(e) {
         gemsPerClick[brawler.id] = brawlerData.gemsPerClick;
     });
 
-    console.log(gemsPerClick)
     eventsBuffer.filter(event => event.type == "onClick").forEach(event => {
         eventsExecution.find(evex => evex.name === event.name).execute(gemsPerClick);
-        console.log(event.name, gemsPerClick)
     });
 
     Object.keys(gemsPerClick).forEach(brawlerId => {

@@ -31,6 +31,9 @@ const secondsToUpgrade = {
 
 let levelsCostCache = [];
 function getLevelCost(brawlerId, level) {
+    let spikeData = userBrawlersData.find(brw => brw.id === "spike");
+    if (spikeData?.starpower) return 0;
+
     let cacheData = levelsCostCache.find(data => data.brawlerId == brawlerId && data.level == level);
     if (cacheData) return cacheData.cost;
 
@@ -62,6 +65,9 @@ function getLevelCost(brawlerId, level) {
 }
 
 function getGadgetCost(brawlerId) {
+    let spikeData = userBrawlersData.find(brw => brw.id === "spike");
+    if (spikeData?.starpower) return 0;
+
     let index = Object.keys(brawlersData).indexOf(brawlerId);
     let sp = Object.keys(brawlersData).slice(0, index + 1).reduce((acc, cv) => acc + brawlersData[cv].gemsPerSecond.at(-1), 0);
 
@@ -71,6 +77,9 @@ function getGadgetCost(brawlerId) {
 }
 
 function getStarpowerCost(brawlerId) {
+    let spikeData = userBrawlersData.find(brw => brw.id === "spike");
+    if (spikeData?.starpower) return 0;
+
     let index = Object.keys(brawlersData).indexOf(brawlerId);
     let sp = Object.keys(brawlersData).slice(0, index + 1).reduce((acc, cv) => acc + brawlersData[cv].gemsPerSecond.at(-1), 0);
 
@@ -80,6 +89,9 @@ function getStarpowerCost(brawlerId) {
 }
 
 function getExpToOpen(brawlerId) {
+    let spikeData = userBrawlersData.find(brw => brw.id === "spike");
+    if (spikeData?.starpower) return 0;
+
     let index = Object.keys(brawlersData).indexOf(brawlerId);
 
     if (index == 0) return 10;

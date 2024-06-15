@@ -202,7 +202,7 @@ let brawlersData = {
         gemsPerClick: 50,
         gemsPerSecond: [1100, 1200, 1300, 1400, 1500, 1700, 1900, 2100, 2200, 2400, 2500]
     },
-    "barley": {
+    "barley": { // Done
         name: "Барли",
         description: "",
         iconName: "Barley.webp",
@@ -210,12 +210,108 @@ let brawlersData = {
         gadget: {
             description: "После использования каждый бравлер будет опьянён ( перестаёт давать какое либо П.Д на 1 минуту ) Но потом начинают зверепеть ( Дают в 4 раза больше П.Д. на 20 сек )",
             cooldownInSeconds: 4 * 60 * 60,
-            execute: () => {}
+            execute: () => {
+                if (!isEventActive("barleyGagdet1")) {
+                    createEvent({
+                        brawlerId: "barley",
+                        name: "barleyGagdet1",
+                        description: "Каждый бравлер опьянён",
+                        duration: 1 * 60 * 1000,
+                        icon: "/gadgets/Barley.webp",
+                        type: "onIteration"
+                    })
+                }
+            }
         },
         starpower: {
-            description: "Барли всегда под воздействием опьянения ( всегда x4 п.д у барли )",
-            execute: () => {}
+            description: "Барли всегда под воздействием берсерка ( всегда x4 п.д у барли )",
+            execute: () => {
+                if (!isEventActive("barleyStarpower")) {
+                    createEvent({
+                        brawlerId: "barley",
+                        name: "barleyStarpower",
+                        description: "Барли всегда в состоянии берсерка",
+                        duration: 0,
+                        icon: "/starpowers/Barley.webp",
+                        type: "onIteration"
+                    })
+                }
+            }
         },
+        events: [
+            {
+                name: "barleyGagdet1",
+                execute: (gps) => {
+                    if (isEventActive("barleyGagdet1")) {
+                        for (const brawlerId in gps) {
+                            if (Object.hasOwnProperty.call(gps, brawlerId)) {
+                                if (brawlerId == "barley") {
+                                    let userData = userBrawlersData.find(brw => brw.id === "shelly");
+                                    if (userData.starpower) return;
+                                }
+                                let brawlerElement = document.querySelector(`[brawlerid="${brawlerId}"] .brawler-introducing`);
+                                if (!brawlerElement.classList.contains("intoxicated"))
+                                    brawlerElement.classList.add("intoxicated");
+                                gps[brawlerId] = 0;
+                            }
+                        }
+                    } else {
+                        for (const brawlerId in gps) {
+                            if (Object.hasOwnProperty.call(gps, brawlerId)) {
+                                let brawlerElement = document.querySelector(`[brawlerid="${brawlerId}"] .brawler-introducing`);
+                                brawlerElement.classList.remove("intoxicated");
+                            }
+                        }
+                        if (!isEventActive("barleyGagdet2")) {
+                            createEvent({
+                                brawlerId: "barley",
+                                name: "barleyGagdet2",
+                                description: "Каждый бравлер озверел",
+                                duration: 20 * 1000,
+                                icon: "/gadgets/Barley.webp",
+                                type: "onIteration"
+                            })
+                        }
+                    }
+                }
+            },
+            {
+                name: "barleyGagdet2",
+                execute: (gps) => {
+                    if (isEventActive("barleyGagdet2")) {
+                        for (const brawlerId in gps) {
+                            if (Object.hasOwnProperty.call(gps, brawlerId)) {
+                                if (brawlerId == "barley") {
+                                    let userData = userBrawlersData.find(brw => brw.id === "shelly");
+                                    if (userData.starpower) return;
+                                }
+                                let brawlerElement = document.querySelector(`[brawlerid="${brawlerId}"] .brawler-introducing`);
+                                if (!brawlerElement.classList.contains("berserk"))
+                                    brawlerElement.classList.add("berserk");
+                                gps[brawlerId] *= 4;
+                            }
+                        }
+                    } else {
+                        for (const brawlerId in gps) {
+                            if (Object.hasOwnProperty.call(gps, brawlerId)) {
+                                let brawlerElement = document.querySelector(`[brawlerid="${brawlerId}"] .brawler-introducing`);
+                                brawlerElement.classList.remove("berserk");
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                name: "barleyStarpower",
+                execute: (gps) => {
+                    let brawlerElement = document.querySelector(`[brawlerid="barley"] .brawler-introducing`);
+                    if (!brawlerElement.classList.contains("berserk"))
+                        brawlerElement.classList.add("berserk");
+
+                    gps.barley *= 4;
+                }
+            }
+        ],
         gemsPerClick: 50,
         gemsPerSecond: [2750, 2900, 3000, 3150, 3300, 3500, 3750, 4000, 4250, 4500, 5000]
     },
@@ -344,19 +440,74 @@ let brawlersData = {
         gemsPerClick: 150,
         gemsPerSecond: [55000, 60000, 65000, 70000, 85000, 95000, 100000, 110000, 120000, 130000, 150000]
     },
-    "carl": {
+    "carl": { // Done
         name: "Карл",
         description: "Шахтёр, работующий вместе со своим товарищем Диномайком. Данный персонаж будет вам всячески помогать, но не забывайте обижать его жруга нельзя.",
         iconName: "Carl.webp",
         rarity: "superrare",
         gadget: {
-            description: "",
+            description: "Карл начинает крутиться и раскидывать 20 кристаллов по карте ( нажмите на 1 из кристалл и получите 10 сек П.Д )",
             cooldownInSeconds: 2 * 60 * 60,
-            execute: () => {}
+            execute: () => {
+                let userData = userBrawlersData.find(brw => brw.id === "carl");
+
+                const delay = 0.5;
+                const duration = 3;
+                let count = 20;
+
+                if (userData?.starpower) {
+                    count = 30;
+                }
+
+                if (!isEventActive("carlGadget")) createEvent({
+                    brawlerId: "carl",
+                    name: "carlGadget",
+                    description: "Карл крутится и раскидывает кристаллы по карте",
+                    duration: (delay * (count - 1) + duration) * 1000,
+                    icon: "/gadgets/Carl.webp",
+                    type: "onStart",
+                })
+            }
         },
         starpower: {
-            description: ""
+            description: "1 кристалл теперь даёт 20 сек П.Д. Кристаллов становиться 30"
         },
+        events: [
+            {
+                name: "carlGadget",
+                execute: () => {
+                    let userData = userBrawlersData.find(brw => brw.id === "carl");
+                    let maxCount = 20;
+                    let multiplier = 10;
+    
+                    if (userData?.starpower) {
+                        maxCount = 30;
+                        multiplier = 20;
+                    }
+
+                    let spawnGemWrapper = () => {
+                        let onCLick = (e) => {
+                            let userData = userBrawlersData.find(brw => brw.id === "carl");
+
+                            let gps = userBrawlersData.reduce((acc, brw) => acc + brawlersData[brw.id].gemsPerSecond[brw.level - 1], 0);
+                            let earned = gps * multiplier;
+                            gems += earned;
+                            setBrawlerData("carl", { earned: userData.earned + earned });
+                            createAddingFX(earned, { x: e.clientX, y: e.clientY });
+                        }
+                        count += 1;
+                        spawnGem(onCLick)
+                    }
+
+                    let count = 0;
+                    spawnGemWrapper();
+                    let interval = setInterval(() => {
+                        if (count == maxCount || !isEventActive("carlGadget")) return clearInterval(interval);
+                        spawnGemWrapper();
+                    }, 0.5 * 1000)
+                }
+            }
+        ],
         gemsPerClick: 200,
         gemsPerSecond: [200000, 220000, 250000, 270000, 300000, 325000, 350000, 375000, 400000, 450000, 500000]
     },
@@ -421,12 +572,12 @@ let brawlersData = {
 
                     let gemsPerSecond = userBrawlersData.reduce((acc, brawler) => acc + brawlersData[brawler.id].gemsPerSecond[brawler.level - 1], 0);
 
-                    const popBubble = () => {
+                    const popBubble = (e) => {
                         let userData = userBrawlersData.find(brw => brw.id === "hank");
                         let earned = gemsPerSecond * 60;
                         gems += earned
                         setBrawlerData("hank", { earned: userData.earned + earned });
-                        createAddingFX(earned, { x: Math.random() * 350, y: Math.random() * 350 }, true);
+                        createAddingFX(earned, { x: e.clientX, y: e.clientY });
                     }
 
                     spawnBubble(popBubble);
@@ -529,7 +680,7 @@ let brawlersData = {
 
                     let brawlerElement = document.querySelector(`[brawlerid="${brawlerId}"] .brawler-introducing`);
                     brawlerElement.classList.add("gadget-activated");
-                    console.log(brawlerId)
+
                     setTimeout(() => brawlerElement.classList.remove("gadget-activated"), 2 * 1000);
 
                     brawlersData[brawlerId].gadget.execute();
@@ -542,19 +693,109 @@ let brawlersData = {
         gemsPerClick: 700,
         gemsPerSecond: [100000000, 200000000, 300000000, 400000000, 500000000, 600000000, 700000000, 800000000, 900000000, 1000000000, 1200000000]
     },
-    "frank": {
+    "frank": {  // Done
         name: "Фрэнк",
         description: "Монстр Франкенштейн во плоти, но на самом деле под маской чудовища скрывается душа профессионального ди-джея, который просто тратит на музыку большую часть своего времени от чего он недосыпает.",
         iconName: "Frank.webp",
         rarity: "epic",
         gadget: {
-            description: "",
-            cooldownInSeconds: 30 * 60,
-            execute: () => {}
+            description: "Даёт положительный или негативный эффект",
+            cooldownInSeconds: 6 * 60 * 60,
+            execute: () => {
+                let userData = userBrawlersData.find(brw => brw.id === "frank");
+
+                let effectsList = [1,2,3,4];
+                let selectedEffect = effectsList.splice(Math.floor(Math.random() * (effectsList.length) + 0), 1)[0];
+                createEffect(selectedEffect);
+
+                if (userData?.starpower) {
+                    createEffect(effectsList.splice(Math.floor(Math.random() * (effectsList.length)), 1)[0]);
+                }
+
+
+                function createEffect(number) {
+                    if (number == 1) {
+                        if (!isEventActive("frankEffect1")) createEvent({
+                            brawlerId: "frank",
+                            name: "frankEffect1",
+                            description: "+10% к П.Д",
+                            duration: 20 * 60 * 1000,
+                            icon: "/gadgets/Frank.webp",
+                            type: "onIteration",
+                        });
+                    } else if (number == 2) {
+                        if (!isEventActive("frankEffect2")) createEvent({
+                            brawlerId: "frank",
+                            name: "frankEffect2",
+                            description: "+5% к кликам от П.Д",
+                            duration: 15 * 60 * 1000,
+                            icon: "/gadgets/Frank.webp",
+                            type: "onClick",
+                        });
+                    } else if (number == 3) {
+                        if (!isEventActive("frankEffect3")) createEvent({
+                            brawlerId: "frank",
+                            name: "frankEffect3",
+                            description: "-5% к П.Д",
+                            duration: 20 * 60 * 1000,
+                            icon: "/gadgets/Frank.webp",
+                            type: "onIteration",
+                        });
+                    } else if (number == 4) {
+                        if (!isEventActive("frankEffect4")) createEvent({
+                            brawlerId: "frank",
+                            name: "frankEffect4",
+                            description: "-90% к кликам",
+                            duration: 15 * 60 * 1000,
+                            icon: "/gadgets/Frank.webp",
+                            type: "onClick",
+                        });
+                    }
+                }
+            }
         },
         starpower: {
-            description: ""
+            description: "Гаджет дает 2 эффекта. Один из них 100% положительный"
         },
+        events: [
+            {
+                name: "frankEffect1",
+                execute: (gemsPerSecond) => {
+                    for (const brawlerId in gemsPerSecond) {
+                        if (Object.hasOwnProperty.call(gemsPerSecond, brawlerId)) {
+                            gemsPerSecond[brawlerId] *= 1.1;
+                        }
+                    }
+                }
+            },
+            {
+                name: "frankEffect2",
+                execute: (gemsPerClick) => {
+                    let pd = userBrawlersData.reduce((acc, brawler) => acc + brawlersData[brawler.id].gemsPerSecond[brawler.level - 1], 0);
+                    gemsPerClick.frank = pd * 0.05;
+                }
+            },
+            {
+                name: "frankEffect3",
+                execute: (gemsPerSecond) => {
+                    for (const brawlerId in gemsPerSecond) {
+                        if (Object.hasOwnProperty.call(gemsPerSecond, brawlerId)) {
+                            gemsPerSecond[brawlerId] *= 0.95;
+                        }
+                    }
+                }
+            },
+            {
+                name: "frankEffect4",
+                execute: (gemsPerClick) => {
+                    for (const brawlerId in gemsPerClick) {
+                        if (Object.hasOwnProperty.call(gemsPerClick, brawlerId)) {
+                            gemsPerClick[brawlerId] *= 0.1;
+                        }
+                    }
+                }
+            },
+        ],
         gemsPerClick: 1000,
         gemsPerSecond: [1500000000, 2000000000, 2500000000, 3000000000, 3500000000, 4000000000, 5000000000, 7000000000, 9000000000, 11000000000, 15000000000]
     },
@@ -622,10 +863,13 @@ let brawlersData = {
             description: "Навсегда увеличивает свой П.Д. на 1%",
             cooldownInSeconds: 2 * 60 * 60,
             execute: () => {
-                let multiplier = getData("maxMultiplier") ?? 1;
-                setData("maxMultiplier", multiplier + 1);
+                let multiplier = getData("maxMultiplier") ?? 0;
+                multiplier += 1
+                setData("maxMultiplier", multiplier);
 
-                if (!isEventActive("maxGadget")) createEvent({
+                if (isEventActive("maxGadget")) clearEvent("maxGadget");
+
+                createEvent({
                     brawlerId: "max",
                     name: "maxGadget",
                     description: `П.Д Макс увеличен на ${multiplier}%`,
@@ -661,7 +905,6 @@ let brawlersData = {
                 execute: (gpc) => {
                     let pd = userBrawlersData.reduce((acc, brawler) => acc + brawlersData[brawler.id].gemsPerSecond[brawler.level - 1], 0);
                     gpc.max = pd * 0.1;
-                    console.log(pd);
                 }
             }
         ],
@@ -869,52 +1112,169 @@ let brawlersData = {
         gemsPerClick: 5000,
         gemsPerSecond: [10000000000000000, 12000000000000000, 14000000000000000, 16000000000000000, 18000000000000000, 20000000000000000, 25000000000000000, 30000000000000000, 35000000000000000, 40000000000000000, 50000000000000000]
     },
-    "sandy": {
+    "sandy": { // Done
         name: "Сэнди",
         description: "Главная соня вашей команды. В те редкие моменты когда он бодрствует он будет из-за всех своих не многих сил будет вам помогать(но почти сразу же он пойдёт отсыпаться почти весь день).",
         iconName: "Sandy.webp",
         rarity: "legendary",
         gadget: {
-            description: "",
+            description: "Сэнди засыпает на час, но после получает 500% к собственному П.Д. на 30 минут",
             cooldownInSeconds: 20 * 60 * 60,
-            execute: () => {}
+            execute: () => {
+                let userData = userBrawlersData.find(brw => brw.id === "sandy");
+
+                let brawlers  = ["sandy"];
+
+                if (userData?.starpower) {
+                    const min = 2;
+                    const max = 4;
+                    let count = Math.floor(Math.random() * (max + 1 - min) + min);
+                    brawlers = brawlers.concat(userBrawlersData.filter(brw => brw.id !== "sandy").sort(() => Math.random() - 0.5).slice(0, count).map(brw => brw.id));
+                }
+
+                if (!isEventActive("sandyGadget")) createEvent({
+                    brawlerId: "sandy",
+                    name: "sandyGadget",
+                    description: `${brawlers.map(brwId => brawlersData[brwId].name).join(", ")} засыпа${brawlers.length == 1 ? "ет" : "ют"}, но после получ${brawlers.length == 1 ? "ит" : "ат"} бонус к доходу`,
+                    duration: 90 * 60 * 1000,
+                    icon: "/gadgets/Sandy.webp",
+                    type: "onIteration",
+                    brawlers
+                })
+            }
         },
         starpower: {
-            description: ""
+            description: "При использовании гаджета так же засыпают несколько бравлеров и получают 500% к своему П.Д."
         },
+        events: [
+            {
+                name: "sandyGadget",
+                execute: (gps) => {
+                    let event = eventsBuffer.find(event => event.name == "sandyGadget");
+                    event.brawlers.forEach(brwId => {
+                        if (event.start + event.duration - Date.now() > 30 * 60 * 1000) {
+                            gps[brwId] = 0;
+    
+                            let element = document.querySelector(`[brawlerId="${brwId}"] .brawler-introducing`);
+                            if (!element.classList.contains("sleep")) element.classList.add("sleep");
+                        } else {
+                            gps[brwId] *= 5;
+
+                            let element = document.querySelector(`[brawlerId="${brwId}"] .brawler-introducing`);
+                            if (element.classList.contains("sleep")) element.classList.remove("sleep");
+                            if (!element.classList.contains("buffed")) element.classList.add("buffed");
+                            if (!isEventActive("sandyGadget")) {
+                                element.classList.remove("buffed");
+                                return;
+                            } 
+                        }
+                    });
+                }
+            }
+        ],
         gemsPerClick: 5000,
         gemsPerSecond: [100000000000000000, 120000000000000000, 140000000000000000, 160000000000000000, 180000000000000000, 200000000000000000, 220000000000000000, 240000000000000000, 260000000000000000, 280000000000000000, 300000000000000000]
     },
-    "surge": {
+    "surge": { // Done
         name: "Вольт",
         description: "Вечно заряженный и бодр сил(Сэнди бы такое не помешало), он будет для вашей команды тем самым другом который может в любой момент, даже в самое неподходящее для этого время начать так зажигать, что от такого у вас глаза на лоб полезут",
         iconName: "Surge.webp",
         rarity: "legendary",
         gadget: {
-            description: "",
-            cooldownInSeconds: 0,
-            execute: () => {}
+            description: "Навсегда увеличивает свой П.Д. на 1%",
+            cooldownInSeconds: 30 * 60,
+            execute: () => {
+                let multiplier = getData("surgeMultiplier") ?? 0;
+                multiplier += 1;
+                setData("surgeMultiplier", multiplier);
+
+                if (isEventActive("surgeGadget")) clearEvent("surgeGadget");
+                createEvent({
+                    brawlerId: "surge",
+                    name: "surgeGadget",
+                    description: `П.Д Вольта увеличен на ${multiplier}%`,
+                    duration: 0,
+                    icon: "/gadgets/Surge.webp",
+                    type: "onIteration",
+                })
+            }
         },
         starpower: {
-            description: ""
+            description: "Улучшает П.Д каждого бравлера на 5% ( навсегда )",
+            execute: () => {
+                if (!isEventActive("surgeStarpower")) createEvent({
+                    brawlerId: "surge",
+                    name: "surgeStarpower",
+                    description: `Доход каждого бойца увеличен на 5%`,
+                    duration: 0,
+                    icon: "/starpowers/Surge.webp",
+                    type: "onIteration"
+                })
+            }
         },
+        events: [
+            {
+                name: "surgeGadget",
+                execute: (gps) => {
+                    let multiplier = getData("surgeMultiplier");
+                    gps.surge *= 1 + (multiplier / 100);
+                }
+            },
+            {
+                name: "surgeStarpower",
+                execute: (gemsPerSecond) => {
+                    for (const brawlerId in gemsPerSecond) {
+                        if (Object.hasOwnProperty.call(gemsPerSecond, brawlerId)) {
+                            gemsPerSecond[brawlerId] *= 1.05;
+                        }
+                    }
+                }
+            }
+        ],
         gemsPerClick: 5000,
         gemsPerSecond: [500000000000000000, 520000000000000000, 540000000000000000, 560000000000000000, 580000000000000000, 600000000000000000, 650000000000000000, 700000000000000000, 750000000000000000, 800000000000000000, 900000000000000000]
     },
-    "spike": {
+    "spike": { // Done
         name: "Спайк",
         description: "В бескрайней пустыне где нет ничего кроме песка и перекати-поле живёт он, не пойми как живой кактус, он всегда молчит, но кто знает что скрывается за этой простодушной (если так можно говорить о кактусе)улыбкой.",
         iconName: "Spike.webp",
         rarity: "legendary",
         gadget: {
-            description: "",
-            cooldownInSeconds: 2 * 60 * 60,
-            execute: () => {}
+            description: "Выпускает колючки которые попадают в каждого бравлера. Теперь каждый бравлер даёт +2% от П.Д. спайка на 2 часа)",
+            cooldownInSeconds: 4 * 60 * 60,
+            execute: () => {
+                if (!isEventActive("spikeGadget")) createEvent({
+                    brawlerId: "spike",
+                    name: "spikeGadget",
+                    description: `Каждый бравлер даёт +2% от П.Д. спайка.`,
+                    duration: 2 * 60 * 60 * 1000,
+                    icon: "/gadgets/spike.webp",
+                    type: "onIteration"
+                })
+            }
         },
         starpower: {
-            description: ""
+            description: "Всё становиться бесплатным",
+            execute: () => {
+                renderAll();
+            }
         },
+        events: [
+            {
+                name: "spikeGadget",
+                execute: (gemsPerSecond) => {
+                    let userData = userBrawlersData.find(brw => brw.id === "spike");
+                    let spikePd = brawlersData["spike"].gemsPerSecond[userData.level - 1];
+
+                    for (const brawlerId in gemsPerSecond) {
+                        if (Object.hasOwnProperty.call(gemsPerSecond, brawlerId)) {
+                            gemsPerSecond[brawlerId] += spikePd * 0.02;
+                        }
+                    }
+                }
+            }
+        ],
         gemsPerClick: 5000,
         gemsPerSecond: [1000000000000000000, 2000000000000000000, 3000000000000000000, 4000000000000000000, 5000000000000000000, 6000000000000000000, 7000000000000000000, 8000000000000000000, 9000000000000000000, 10000000000000000000, 11000000000000000000]
-    },
+    }
 }
